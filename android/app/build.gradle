@@ -43,7 +43,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "me.jscott.western_empires"
+        applicationId "me.jscott.mega_empires"
         minSdkVersion 16
         targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
