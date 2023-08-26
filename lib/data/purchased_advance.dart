@@ -20,7 +20,7 @@ final class PurchasedAdvance {
   /// The complete set of credits from this purchased advance, including
   /// mandatory and "additional".
   Map<AdvanceColour, int> credits() {
-    var credits = Map.of(additionalCredits);
+    final credits = Map.of(additionalCredits);
 
     advance.discounts.forEach((colour, value) {
       if (!credits.containsKey(colour)) {
@@ -34,7 +34,7 @@ final class PurchasedAdvance {
 
   factory PurchasedAdvance.fromJson(Map<String, dynamic> data) =>
       PurchasedAdvance.withAdditional(
-        indexedAdvances[data["advance"]]!,
+        indexedAdvances[AdvanceKey.values.byName(data["advance"]!)]!,
         data["additionalCredits"].map<AdvanceColour, int>(
                 (String key, dynamic value) =>
                     MapEntry(advanceColourFromEnColourName(key), value as int))
@@ -42,7 +42,7 @@ final class PurchasedAdvance {
       );
 
   Map<String, dynamic> toJson() => {
-        'advance': advance.title,
+        'advance': advance.key.name,
         'additionalCredits': additionalCredits
             .map((key, value) => MapEntry(key.enColourName, value)),
       };

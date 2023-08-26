@@ -1,152 +1,219 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:mega_empires_assistant/main.dart';
+import 'package:mega_empires_assistant/data/game_state.dart';
+import 'package:mega_empires_assistant/data/trade_goods.dart';
+import 'package:mega_empires_assistant/generated/l10n.dart';
 import 'package:mega_empires_assistant/screens/summary.dart';
-import 'package:mega_empires_assistant/screens/trade_goods.dart';
-import '../util/utils.dart';
 
-// TODO: Add a warning that we will need to discard if we have > the hand limit
-// 10-11 players: 8
-// 12-18: 9
-class Payment extends StatefulWidget {
-  GameState state;
+/// The screen shown when we have selected our advances and know our trade goods.
+/// It allows us to select the trade goods to make up the cost
+final class MakePaymentScreen extends StatefulWidget {
+  /// The [GameState] when beginning making payment
+  final GameState state;
 
-  Payment({Key? key, required this.state}) : super(key: key);
+  const MakePaymentScreen({Key? key, required this.state}) : super(key: key);
 
   @override
-  _PaymentState createState() => _PaymentState();
+  MakePaymentScreenState createState() => MakePaymentScreenState();
 }
 
-class _PaymentState extends State<Payment> {
-  var tradeGoodCounts = Map<TradeGood, int>();
-  var tradeGoodMax = Map<TradeGood, int>();
-  List<TradeGood> activeTradeGoods = [];
-  late int toRemove;
+final class MakePaymentScreenState extends State<MakePaymentScreen> {
+  /// The number of [TradeGood]s we have selected to spend
+  final tradeGoodCounts = <TradeGood, int>{};
+
+  /// All types of [TradeGood] which we are eligible to spend
+  late List<TradeGood> activeTradeGoods;
+
+  int totalCardsAvailable = 0;
 
   @override
   void initState() {
-    tradeGoodMax = Map.of(widget.state.tradeGoods);
-    toRemove = calculateTotalCost(widget.state);
+    activeTradeGoods = widget.state.tradeGoods.entries
+        .where((e) => e.value > 0)
+        .map((e) => e.key)
+        .toList();
 
-    allTradeGoods.forEach((tradeGood) {
-      if (tradeGoodMax.containsKey(tradeGood) && tradeGoodMax[tradeGood]! > 0) {
-        activeTradeGoods.add(tradeGood);
-      }
-    });
+    totalCardsAvailable = widget.state.tradeGoods.entries
+        .where((e) => e.key != TradeGood.treasuryToken)
+        .map((e) => e.value)
+        .reduce((v, e) => v + e);
 
     super.initState();
   }
 
-  int stillToPay() {
-    return toRemove - calculateTotalValue(tradeGoodCounts, widget.state);
+  /// The amount of credits still to pay after accounting for currently selected [TradeGood]s
+  int get stillToPay {
+    return widget.state.totalCostOfAdvancesInCart -
+        calculateTotalValue(tradeGoodCounts, widget.state);
   }
 
-  String stillToPayText() {
-    if (stillToPay() >= 0) {
-      return "Still to pay";
+  /// The prefix to the amount of credits still to pay or wasted
+  String get stillToPayText {
+    if (stillToPay >= 0) {
+      return S.of(context).creditsStillToPay;
     }
-    return "Wasted";
+    return S.of(context).creditsWasted;
   }
 
+  /// The number of cards remaining after we discard the ones we've chosen
+  int get cardsRemaining {
+    final totalUsed = tradeGoodCounts.entries
+        .where((element) => element.key != TradeGood.treasuryToken)
+        .fold(0, (a, b) => a + b.value);
+
+    return totalCardsAvailable - totalUsed;
+  }
+
+  /// The number of cards to be discarded with the current state
+  /// (taking into account the cards selected as part of the current payment)
+  int get cardsToDiscard {
+    final handLimit = (((widget.state.settings.numberOfPlayers > 11) ? 9 : 8) +
+            widget.state.purchasedAdvances
+                .map((e) => e.advance.handLimitModifier)
+                .fold(0, (p, e) => p + e) +
+            widget.state.advancesInCart
+                .map((e) => e.advance.handLimitModifier)
+                .fold(0, (p, e) => p + e))
+        .toInt();
+
+    return max(0, cardsRemaining - handLimit);
+  }
+
+  /// True if we're able to continue (not over our hand limit and paid for everything)
+  bool get canContinue {
+    return stillToPay <= 0 && cardsToDiscard <= 0;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-            appBar: AppBar(
-              title: Text("Make Payment"),
-            ),
-            body: Container(
-              child: Column(children: <Widget>[
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: activeTradeGoods.length,
-                    itemBuilder: (context, index) {
-                      return TradeGoodListTile(
-                          tradeGood: activeTradeGoods[index],
-                          maxCount: tradeGoodMax[activeTradeGoods[index]]!,
-                          itemCount: tradeGoodCounts
-                              .containsKey(activeTradeGoods[index])
-                              ? tradeGoodCounts[activeTradeGoods[index]]!
-                              : 0,
-                          increment: () {
-                            setState(() {
-                              tradeGoodCounts
-                                  .putIfAbsent(activeTradeGoods[index], () {
-                                return 0;
-                              });
-                              tradeGoodCounts[activeTradeGoods[index]] = tradeGoodCounts[activeTradeGoods[index]]! + 1;
-                            });
-                          },
-                          decrement: () {
-                            setState(() {
-                              tradeGoodCounts
-                                  .putIfAbsent(activeTradeGoods[index], () {
-                                return 0;
-                              });
-                              tradeGoodCounts[activeTradeGoods[index]] = tradeGoodCounts[activeTradeGoods[index]]! - 1;
-                            });
-                          });
+        appBar: AppBar(
+          title: Text(S.of(context).makePayment),
+        ),
+        body: Column(children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: activeTradeGoods.length,
+              itemBuilder: (context, index) {
+                return TradeGoodListTile(
+                    tradeGood: activeTradeGoods[index],
+                    maxCount: widget.state.tradeGoods[activeTradeGoods[index]]!,
+                    itemCount:
+                        tradeGoodCounts.containsKey(activeTradeGoods[index])
+                            ? tradeGoodCounts[activeTradeGoods[index]]!
+                            : 0,
+                    increment: () {
+                      setState(() {
+                        tradeGoodCounts.putIfAbsent(activeTradeGoods[index],
+                            () {
+                          return 0;
+                        });
+                        tradeGoodCounts[activeTradeGoods[index]] =
+                            tradeGoodCounts[activeTradeGoods[index]]! + 1;
+                      });
                     },
-                  ),
-                ),
-                Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Padding(
-                            child: Text(stillToPayText() + ": " +
-                                (stillToPay().abs())
-                                    .toString()),
-                            padding: const EdgeInsets.only(right: 40)),
-                        ButtonBar(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            new OutlinedButton(
-                              child: new Text('Continue'),
-                              onPressed: stillToPay() > 0 ? null : () {
+                    decrement: () {
+                      setState(() {
+                        tradeGoodCounts.putIfAbsent(activeTradeGoods[index],
+                            () {
+                          return 0;
+                        });
+                        tradeGoodCounts[activeTradeGoods[index]] =
+                            tradeGoodCounts[activeTradeGoods[index]]! - 1;
+                      });
+                    });
+              },
+            ),
+          ),
+          Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                      padding: const EdgeInsets.only(right: 40),
+                      child: Row(children: [
+                        Text(
+                          "$stillToPayText: ${stillToPay.abs()}",
+                          style: TextStyle(
+                              color:
+                                  (stillToPay > 0) ? Colors.red : Colors.black),
+                        ),
+                        const Text("     "),
+                        (stillToPay > 0 || cardsToDiscard <= 0)
+                            ? const Text("")
+                            : Text(
+                                S
+                                    .of(context)
+                                    .paymentDiscardTradeGoods(cardsToDiscard),
+                                style: const TextStyle(color: Colors.red),
+                              )
+                      ])),
+                  ButtonBar(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      OutlinedButton(
+                        onPressed: !canContinue
+                            ? null
+                            : () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Summary(
-                                          state: widget.state, spendingGoods: tradeGoodCounts)),
+                                      builder: (context) => SummaryScreen(
+                                          state: widget.state,
+                                          spendingGoods: tradeGoodCounts)),
                                 );
                               },
-                            )
-                          ],
-                        )
-                      ],
-                    )),
-              ]),
-            ));
+                        child: Text(S.of(context).cont),
+                      )
+                    ],
+                  )
+                ],
+              )),
+        ]));
   }
 }
 
-class TradeGoodListTile extends StatelessWidget {
+final class TradeGoodListTile extends StatelessWidget {
+  /// The number of this trade good which we currently have selected
   final int itemCount;
-  final int maxCount;
-  TradeGood tradeGood;
 
-  VoidCallback increment;
-  VoidCallback decrement;
+  /// The maximum number of these trade goods we can select
+  final int maxCount;
+
+  /// The trade good
+  final TradeGood tradeGood;
+
+  /// Callback when the user wants to increment the count
+  final VoidCallback increment;
+
+  /// Callback when the user wants to decrement the count
+  final VoidCallback decrement;
 
   TradeGoodListTile(
-      {required this.tradeGood, required this.maxCount, required this.itemCount, required this.increment, required this.decrement})
+      {required this.tradeGood,
+      required this.maxCount,
+      required this.itemCount,
+      required this.increment,
+      required this.decrement})
       : super(key: Key(tradeGood.title));
 
   @override
   Widget build(BuildContext context) {
-    return new ListTile(
-        title: new Text(tradeGood.title),
+    return ListTile(
+        title: Text(tradeGood.title),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
+          children: [
             itemCount != 0
-                ? new IconButton(
-                icon: new Icon(Icons.remove), onPressed: decrement)
-                : new Container(),
+                ? IconButton(
+                    icon: const Icon(Icons.remove), onPressed: decrement)
+                : Container(),
             Text(itemCount.toString()),
             itemCount < maxCount
-                ? new IconButton(
-                icon: new Icon(Icons.add), onPressed: increment)
-                : new Container(height: 10, width: 48)
+                ? IconButton(icon: const Icon(Icons.add), onPressed: increment)
+                : const SizedBox(height: 10, width: 48)
           ],
         ));
   }

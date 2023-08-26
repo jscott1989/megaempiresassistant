@@ -1,30 +1,34 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SearchController;
+import 'package:mega_empires_assistant/data/advance.dart';
+import 'package:mega_empires_assistant/data/game_state.dart';
+import 'package:mega_empires_assistant/data/purchased_advance.dart';
+import 'package:mega_empires_assistant/game/advances.dart';
+import 'package:mega_empires_assistant/generated/l10n.dart';
+import 'package:mega_empires_assistant/screens/edit_credits.dart';
 import 'package:mega_empires_assistant/screens/view_advance.dart';
-import 'package:mega_empires_assistant/util/utils.dart';
+import 'package:mega_empires_assistant/screens/widgets/search_controller.dart';
 
-import '../data/advance.dart';
-import '../game/advances.dart';
-import 'edit_credits.dart';
-import '../main.dart';
-import '../data/purchased_advance.dart';
+/// Screen to allow modifying the advances we have, without taking into account
+/// costs, etc.
+final class EditAdvancesScreen extends StatefulWidget {
+  /// A callback to be called with the modified [GameState] upon completion
+  final Function(GameState) update;
 
+  /// The starting [GameState]
+  final GameState state;
 
-class EditAdvances extends StatefulWidget {
-  Function(GameState) update;
-  GameState state;
-
-  EditAdvances({Key? key, required this.state, required this.update}) : super(key: key);
+  const EditAdvancesScreen(
+      {Key? key, required this.state, required this.update})
+      : super(key: key);
 
   @override
-  _EditAdvancesState createState() => _EditAdvancesState();
+  EditAdvancesScreenState createState() => EditAdvancesScreenState();
 }
 
-class _EditAdvancesState extends State<EditAdvances> {
-  TextEditingController searchController = TextEditingController();
-
-  List<Advance> activeAdvances = [];
-  var purchasedAdvances = Set<PurchasedAdvance>();
-  var selectedAdvances = Map<Advance, PurchasedAdvance>();
+final class EditAdvancesScreenState extends State<EditAdvancesScreen> {
+  final List<Advance> activeAdvances = [];
+  final purchasedAdvances = <PurchasedAdvance>{};
+  final selectedAdvances = <Advance, PurchasedAdvance>{};
 
   @override
   void initState() {
@@ -32,140 +36,105 @@ class _EditAdvancesState extends State<EditAdvances> {
     for (var advance in purchasedAdvances) {
       selectedAdvances[advance.advance] = advance;
     }
-
-    activeAdvances.addAll(allAdvances);
     super.initState();
-  }
-
-  void filterSearchResults(String query) {
-    if (query.isNotEmpty) {
-      List<Advance> searchResults = [];
-      allAdvances.forEach((item) {
-        if (item.title.toLowerCase().contains(query.toLowerCase())) {
-          searchResults.add(item);
-        }
-      });
-      setState(() {
-        activeAdvances.clear();
-        activeAdvances.addAll(searchResults);
-      });
-      return;
-    } else {
-      setState(() {
-        activeAdvances.clear();
-        activeAdvances.addAll(allAdvances);
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-            appBar: AppBar(
-              title: Text("Edit Advances"),
-            ),
-            body: Container(
-              child: Column(children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    onChanged: (value) {
-                      filterSearchResults(value);
-                    },
-                    controller: searchController,
-                    decoration: InputDecoration(
-                        labelText: "Search",
-                        hintText: "Search",
-                        prefixIcon: Icon(Icons.search),
-                        border: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(25.0)))),
-                  ),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: activeAdvances.length,
-                    itemBuilder: (context, index) {
-                      return AdvanceListTile(
-                          state: widget.state,
-                          advance: activeAdvances[index],
-                          selected:
-                          selectedAdvances.containsKey(activeAdvances[index]),
-                          onChange: (selected) {
-                            if (selected) {
-                              setState(() {
-                                var purchase = PurchasedAdvance.of(activeAdvances[index]);
-                                purchasedAdvances.add(purchase);
-                                selectedAdvances[activeAdvances[index]] = purchase;
-                              });
-                            } else {
-                              setState(() {
-                                purchasedAdvances.remove(selectedAdvances[activeAdvances[index]]);
-                                selectedAdvances.remove(activeAdvances[index]);
-                              });
-                            }
-                          });
-                    },
-                  ),
-                ),
-                Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        ButtonBar(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            new OutlinedButton(
-                              child: new Text('Continue'),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => EditCredits(
-                                          state: widget.state.withAdvances(purchasedAdvances),
-                                          update: (state) {
-                                            Navigator.pop(context);
-                                            widget.update(state);
-                                          }))
-                                );
-                                }
-                            )
-                          ],
-                        )
-                      ],
-                    )),
-              ]),
-            ));
+        appBar: AppBar(
+          title: Text(S.of(context).editAdvances),
+        ),
+        body: Column(children: [
+          SearchController<Advance>(
+            allItems: allAdvances,
+            queryFunction: (advance, query) {
+              return advance.title.toLowerCase().contains(query);
+            },
+            itemBuilder: (advance) {
+              return AdvanceListTile(
+                  state: widget.state,
+                  advance: advance,
+                  selected: selectedAdvances.containsKey(advance),
+                  onChange: (selected) {
+                    if (selected) {
+                      setState(() {
+                        var purchase = PurchasedAdvance.of(advance);
+                        purchasedAdvances.add(purchase);
+                        selectedAdvances[advance] = purchase;
+                      });
+                    } else {
+                      setState(() {
+                        purchasedAdvances.remove(selectedAdvances[advance]);
+                        selectedAdvances.remove(advance);
+                      });
+                    }
+                  });
+            },
+          ),
+          Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ButtonBar(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      OutlinedButton(
+                          child: Text(S.of(context).cont),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EditCreditsScreen(
+                                        state: widget.state
+                                            .withAdvances(purchasedAdvances),
+                                        update: (state) {
+                                          Navigator.pop(context);
+                                          widget.update(state);
+                                        })));
+                          })
+                    ],
+                  )
+                ],
+              ))
+        ]));
   }
 }
 
-class AdvanceListTile extends StatelessWidget {
-  GameState state;
-  Advance advance;
-  bool selected;
-  Function onChange;
+final class AdvanceListTile extends StatelessWidget {
+  final GameState state;
+  final Advance advance;
+  final bool selected;
+  final Function onChange;
 
-  AdvanceListTile({required this.state, required this.advance, required this.selected, required this.onChange})
-      : super(key: Key(advance.title));
+  AdvanceListTile(
+      {required this.state,
+      required this.advance,
+      required this.selected,
+      required this.onChange})
+      : super(key: Key(advance.key.name));
 
   @override
   Widget build(BuildContext context) {
-    return new Container(
-        decoration: boxDecorationForAdvance(advance),
-        child: new CheckboxListTile(
+    return Container(
+        decoration: advance.boxDecoration(),
+        child: CheckboxListTile(
           title: Row(children: [
             TextButton(
-              style: TextButton.styleFrom(padding: EdgeInsets.zero, minimumSize: Size(0, 30)),
-              child: Icon(Icons.info_outline, color: Colors.black),
+              style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero, minimumSize: const Size(0, 30)),
+              child: const Icon(Icons.info_outline, color: Colors.black),
               onPressed: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ViewAdvance(state: state, advance: advance)
-                    ));
+                        builder: (context) =>
+                            ViewAdvance(state: state, advance: advance)));
               },
-            ), Text(" " + advance.title)]),
+            ),
+            Text(" ${advance.title}")
+          ]),
           value: selected,
           onChanged: (bool? value) {
             onChange(value);

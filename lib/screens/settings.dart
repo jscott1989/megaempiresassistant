@@ -1,41 +1,44 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mega_empires_assistant/screens/trade_goods.dart';
+import 'package:mega_empires_assistant/data/game_state.dart';
+import 'package:mega_empires_assistant/data/settings.dart';
+import 'package:mega_empires_assistant/game/game.dart';
+import 'package:mega_empires_assistant/game/game_setup.dart';
+import 'package:mega_empires_assistant/generated/l10n.dart';
+import 'package:mega_empires_assistant/screens/widgets/basic_settings.dart';
 
-import '../main.dart';
+/// The screen to change overall settings after starting the game
+final class EditSettingsScreen extends StatefulWidget {
+  final GameState state;
+  final Function(GameState) update;
 
-class EditSettings extends StatefulWidget {
-  GameState state;
-  Function update;
-
-  EditSettings({Key? key, required this.state, required this.update}) : super(key: key);
+  const EditSettingsScreen(
+      {Key? key, required this.state, required this.update})
+      : super(key: key);
 
   @override
-  _EditSettingsState createState() => _EditSettingsState();
+  EditSettingsScreenState createState() => EditSettingsScreenState();
 }
 
-class _EditSettingsState extends State<EditSettings> {
+class EditSettingsScreenState extends State<EditSettingsScreen> {
+  /// The games which are being played
+  var enabledGames = <Game>{};
 
-  var easternEmpiresEnabled = false;
-  var westernEmpiresEnabled = false;
+  /// The setup for the game
+  var gameSetup = GameSetup.normal;
 
-  final numberOfPlayersController = TextEditingController();
+  /// The potential number of players if supported by the enabled games
+  var potentialNumberOfPlayers = 0;
 
   @override
   void dispose() {
-    numberOfPlayersController.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
-    easternEmpiresEnabled = widget.state.settings.games.contains(Game.EASTERN);
-    westernEmpiresEnabled = widget.state.settings.games.contains(Game.WESTERN);
-    numberOfPlayersController.text = widget.state.settings.numberOfPlayers.toString();
+    enabledGames = widget.state.settings.games;
+    potentialNumberOfPlayers = widget.state.settings.numberOfPlayers;
+    gameSetup = widget.state.settings.setup;
     super.initState();
   }
 
@@ -43,105 +46,69 @@ class _EditSettingsState extends State<EditSettings> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Edit Settings"),
+          title: Text(S.of(context).editSettings),
         ),
-        body: Container(
-            child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: Size.fromWidth(100).width),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text("Games"),
+        body: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: const Size.fromWidth(100).width),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(""), // Spacer
+                  Text(
+                    S.of(context).settingsWarningAdvancesCredits,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const Text(""), // Spacer
+                  Expanded(
+                      child: BasicGameSettingsWidget(
+                    enabledGames: enabledGames,
+                    onEnabledGamesChanged: (newValue) {
+                      setState(() {
+                        enabledGames = newValue;
+                      });
+                    },
+                    gameSetup: gameSetup,
+                    onGameSetupChanged: (newGameSetup) {
+                      setState(() {
+                        gameSetup = newGameSetup;
+                      });
+                    },
+                    chosenNumberOfPlayers: potentialNumberOfPlayers,
+                    onChosenNumberOfPlayersChanged: (newValue) {
+                      setState(() {
+                        potentialNumberOfPlayers = newValue;
+                      });
+                    },
+                  )),
 
-                      CheckboxListTile(
-                        title: Text("Western Empires"),
-                        value: westernEmpiresEnabled,
-                        onChanged: (newValue) {
-                          setState(() {
-                            westernEmpiresEnabled = newValue!;
-                          });
-                        },
-                        controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
-                      ),
-
-                      CheckboxListTile(
-                        title: Text("Eastern Empires"),
-                        value: easternEmpiresEnabled,
-                        onChanged: (newValue) {
-                          setState(() {
-                            easternEmpiresEnabled = newValue!;
-                          });
-                        },
-                        controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
-                      ),
-
-                      TextField(
-                          decoration: new InputDecoration(
-                              labelText: "Number of players",
-                              border: OutlineInputBorder()
-                          ),
-                          controller: numberOfPlayersController,
-                          onChanged: (v) { setState(() {
-
-                          });},
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly
-                          ]
-                      ),
-
-                      Text(""), // Spacer
-
-                      OutlinedButton(
-                          onPressed: (canContinue() ? () {
-
-                            var enabledGames = Set<Game>();
-
-                            if (easternEmpiresEnabled) {
-                              enabledGames.add(Game.EASTERN);
-                            }
-                            if (westernEmpiresEnabled) {
-                              enabledGames.add(Game.WESTERN);
-                            }
-
-                            Navigator.pop(context);
-                            widget.update(widget.state.withSettings(
-                              Settings(
-                                numberOfPlayers: int.parse(numberOfPlayersController.text),
-                                games: enabledGames,
-                                setup: GameSetup.NORMAL // TODO: COnfiugre
-                              )
-                            ));
-                          } : null), child: Text("Continue"))
-
-                    ]))));
-  }
-
-  bool canContinue() {
-
-    var maxPlayers = 0;
-
-    if (westernEmpiresEnabled) {
-      maxPlayers += 9;
-    }
-    if (easternEmpiresEnabled) {
-      maxPlayers += 9;
-    }
-
-    if (maxPlayers == 0) {
-      return false;
-    }
-
-    if (numberOfPlayersController.text.isEmpty) {
-      return false;
-    }
-
-    var numberOfPlayers = int.parse(numberOfPlayersController.text);
-
-    if (numberOfPlayers < 1 || numberOfPlayers > maxPlayers) {
-      return false;
-    }
-
-    return true;
+                  Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ButtonBar(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  OutlinedButton(
+                                      onPressed: (gameSettingsAreValid(
+                                              enabledGames: enabledGames,
+                                              numberOfPlayers:
+                                                  potentialNumberOfPlayers)
+                                          ? () {
+                                              Navigator.pop(context);
+                                              widget.update(widget.state
+                                                  .withSettings(Settings(
+                                                      numberOfPlayers:
+                                                          potentialNumberOfPlayers,
+                                                      games: enabledGames,
+                                                      setup: gameSetup)));
+                                            }
+                                          : null),
+                                      child: Text(S.of(context).cont))
+                                ])
+                          ]))
+                ])));
   }
 }
