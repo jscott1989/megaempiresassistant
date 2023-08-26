@@ -2,6 +2,7 @@ import 'package:mega_empires_assistant/data/game_state.dart';
 import 'package:mega_empires_assistant/game/advances.dart';
 import 'package:mega_empires_assistant/game/game.dart';
 import 'package:mega_empires_assistant/game/trade_goods.dart';
+import 'package:mega_empires_assistant/generated/l10n.dart';
 
 /// A trade good card
 final class TradeGood {
@@ -21,7 +22,7 @@ final class TradeGood {
       this.minPlayers = 0});
 
   static TradeGood treasuryToken =
-      TradeGood(title: "Treasure Token", baseValue: 1, max: 9999);
+      TradeGood(title: S.current.treasuryToken, baseValue: 1, max: 9999);
 
   /// The value of the [TradeGood] in a particular count.
   int calculateValue(GameState state, int count) {

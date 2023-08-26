@@ -704,5 +704,6 @@
   "scenarioConqueringTheSeas": "Conquering The Seas",
   "scenarioEmergingEmpire": "Emerging Empire",
   "summaryNothingToDo": "Nothing to discard or pick up. Continue to next round",
-  "selectScenario": "Select Scenario"
+  "selectScenario": "Select Scenario",
+  "treasuryToken": "Treasury Token"
 }

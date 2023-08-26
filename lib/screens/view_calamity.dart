@@ -26,14 +26,14 @@ final class ViewCalamityState extends State<ViewCalamity> {
         initialIndex: 1,
         child: Scaffold(
             appBar: AppBar(
-              iconTheme: const IconThemeData(color: Colors.black),
+              iconTheme: const IconThemeData(color: Colors.white),
               title: Text(
                 widget.calamity.title(widget.state),
-                style: const TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.white),
               ),
               flexibleSpace: Container(),
               bottom: const TabBar(
-                tabs: <Widget>[
+                tabs: [
                   Tab(
                     icon: Icon(Icons.person_off),
                   ),
@@ -51,8 +51,9 @@ final class ViewCalamityState extends State<ViewCalamity> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
+                        const Text(""), // Spacer
                         Text(S.of(context).calamityStandardInformation),
-                        const Text(""),
+                        const Text(""), // Spacer
                         ViewCalamityWidget(
                             // We look at the calamity with no advances
                             state: widget.state.withAdvances({}),
@@ -64,6 +65,7 @@ final class ViewCalamityState extends State<ViewCalamity> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
+                        const Text(""), // Spacer
                         Text(S.of(context).calamityPlayerSpecific),
                         const Text(""),
                         ViewCalamityWidget(

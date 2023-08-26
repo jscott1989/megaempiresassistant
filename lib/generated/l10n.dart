@@ -3236,6 +3236,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Treasury Token`
+  String get treasuryToken {
+    return Intl.message(
+      'Treasury Token',
+      name: 'treasuryToken',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -668,6 +668,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Nothing to discard or pick up. Continue to next round"),
         "tradeGoodValue": m36,
         "tradeGoods": MessageLookupByLibrary.simpleMessage("Trade Goods"),
+        "treasuryToken": MessageLookupByLibrary.simpleMessage("Treasury Token"),
         "viewCalamities":
             MessageLookupByLibrary.simpleMessage("View Calamities"),
         "westernEmpires":

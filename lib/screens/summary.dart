@@ -118,9 +118,10 @@ final class SummaryScreenState extends State<SummaryScreen> {
                               Column(
                                   crossAxisAlignment:
                                       CrossAxisAlignment.stretch,
-                                  children: widget.spendingGoods.keys
-                                      .map((e) => Text(
-                                          "${widget.spendingGoods[e]} ${e.title}"))
+                                  children: widget.spendingGoods.entries
+                                      .where((element) => element.value > 0)
+                                      .map((e) =>
+                                          Text("${e.value} ${e.key.title}"))
                                       .toList())
                             ])
                       : Text(S.of(context).summaryNothingToDo))),
