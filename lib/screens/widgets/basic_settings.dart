@@ -44,6 +44,7 @@ final class BasicGameSettingsWidget extends StatelessWidget {
           Text(S.of(context).games,
               style: const TextStyle(fontWeight: FontWeight.bold)),
           SegmentedButton<Game>(
+            key: const Key("Games"),
             segments: <ButtonSegment<Game>>[
               ButtonSegment<Game>(
                   value: Game.western,
@@ -106,12 +107,14 @@ int getMaxPlayers(Set<Game> enabledGames) {
 bool gameSettingsAreValid(
     {required Set<Game> enabledGames, required int numberOfPlayers}) {
   final maxPlayers = getMaxPlayers(enabledGames);
+  // Don't allow mega empires with < 10
+  final minPlayers = enabledGames.length == 1 ? 3 : 10;
 
   if (maxPlayers == 0) {
     return false;
   }
 
-  if (numberOfPlayers < 3 || numberOfPlayers > maxPlayers) {
+  if (numberOfPlayers < minPlayers || numberOfPlayers > maxPlayers) {
     return false;
   }
 

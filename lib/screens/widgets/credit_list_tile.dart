@@ -40,6 +40,7 @@ class CreditListTile extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 IconButton(
+                    key: decreaseButtonKey(creditType),
                     icon: const Icon(Icons.remove),
                     onPressed: itemCount >= min + 5 ? decrement : null),
                 Container(
@@ -48,9 +49,18 @@ class CreditListTile extends StatelessWidget {
                       Text(itemCount.toString(), textAlign: TextAlign.center),
                 ),
                 IconButton(
+                    key: increaseButtonKey(creditType),
                     icon: const Icon(Icons.add),
                     onPressed: itemCount <= max - 5 ? increment : null)
               ],
             )));
   }
+}
+
+Key increaseButtonKey(AdvanceColour creditType) {
+  return Key("increase_${creditType.name}");
+}
+
+Key decreaseButtonKey(AdvanceColour creditType) {
+  return Key("decrease_${creditType.name}");
 }

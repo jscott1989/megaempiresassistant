@@ -60,10 +60,10 @@ class S {
     );
   }
 
-  /// `The assistant is created to make your Mega Empires games go smoother.\n\nAt any point, you can use the menu in the top right corner to modify the advancements and credits you have, and the game settings.\n\nThe assistant understands the impact of the advancements and will apply them. For example, if you hold the 'Mining' advance then the value of your treasury tokens is automatically counted as double, you don't need to do anything manual to make this happen.\n\nMandatory credits are automatically applied and are visible on the credits screen. You may edit the credits on top of that for your own purposes.\n\nYou can use the 'Calamities' menu to show the effect of each calamity on you given the current state of your advances. Again, this will automatically account for advances which make calamities better or worse for you.\n\n\n\n\n`
+  /// `The assistant is created to make your Mega Empires games go smoother.\n\nAt any point, you can use the menu in the top right corner to modify the advancements and credits you have, and the game settings.\n\nThe assistant understands the impact of the advancements and will apply them. For example, if you hold the 'Mining' advance then the value of your treasury tokens is automatically counted as double, you don't need to do anything manual to make this happen.\n\nMandatory credits are automatically applied and are visible on the credits screen. You may edit the credits on top of that for your own purposes.\n\nYou can use the 'Calamities' menu to show the effect of each calamity on you given the current state of your advances. Again, this will automatically account for advances which make calamities better or worse for you.`
   String get instructions {
     return Intl.message(
-      'The assistant is created to make your Mega Empires games go smoother.\n\nAt any point, you can use the menu in the top right corner to modify the advancements and credits you have, and the game settings.\n\nThe assistant understands the impact of the advancements and will apply them. For example, if you hold the \'Mining\' advance then the value of your treasury tokens is automatically counted as double, you don\'t need to do anything manual to make this happen.\n\nMandatory credits are automatically applied and are visible on the credits screen. You may edit the credits on top of that for your own purposes.\n\nYou can use the \'Calamities\' menu to show the effect of each calamity on you given the current state of your advances. Again, this will automatically account for advances which make calamities better or worse for you.\n\n\n\n\n',
+      'The assistant is created to make your Mega Empires games go smoother.\n\nAt any point, you can use the menu in the top right corner to modify the advancements and credits you have, and the game settings.\n\nThe assistant understands the impact of the advancements and will apply them. For example, if you hold the \'Mining\' advance then the value of your treasury tokens is automatically counted as double, you don\'t need to do anything manual to make this happen.\n\nMandatory credits are automatically applied and are visible on the credits screen. You may edit the credits on top of that for your own purposes.\n\nYou can use the \'Calamities\' menu to show the effect of each calamity on you given the current state of your advances. Again, this will automatically account for advances which make calamities better or worse for you.',
       name: 'instructions',
       desc: '',
       args: [],
@@ -3242,6 +3242,466 @@ class S {
     return Intl.message(
       'Treasury Token',
       name: 'treasuryToken',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ochre`
+  String get tradeGoodOchre {
+    return Intl.message(
+      'Ochre',
+      name: 'tradeGoodOchre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Water`
+  String get tradeGoodWater {
+    return Intl.message(
+      'Water',
+      name: 'tradeGoodWater',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Flax`
+  String get tradeGoodFlax {
+    return Intl.message(
+      'Flax',
+      name: 'tradeGoodFlax',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clay`
+  String get tradeGoodClay {
+    return Intl.message(
+      'Clay',
+      name: 'tradeGoodClay',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hides`
+  String get tradeGoodHides {
+    return Intl.message(
+      'Hides',
+      name: 'tradeGoodHides',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bone`
+  String get tradeGoodBone {
+    return Intl.message(
+      'Bone',
+      name: 'tradeGoodBone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Papyri`
+  String get tradeGoodPapyri {
+    return Intl.message(
+      'Papyri',
+      name: 'tradeGoodPapyri',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Stone`
+  String get tradeGoodStone {
+    return Intl.message(
+      'Stone',
+      name: 'tradeGoodStone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Iron`
+  String get tradeGoodIron {
+    return Intl.message(
+      'Iron',
+      name: 'tradeGoodIron',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Furs`
+  String get tradeGoodFurs {
+    return Intl.message(
+      'Furs',
+      name: 'tradeGoodFurs',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wax`
+  String get tradeGoodWax {
+    return Intl.message(
+      'Wax',
+      name: 'tradeGoodWax',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fish`
+  String get tradeGoodFish {
+    return Intl.message(
+      'Fish',
+      name: 'tradeGoodFish',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Timber`
+  String get tradeGoodTimber {
+    return Intl.message(
+      'Timber',
+      name: 'tradeGoodTimber',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fruit`
+  String get tradeGoodFruit {
+    return Intl.message(
+      'Fruit',
+      name: 'tradeGoodFruit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Salt`
+  String get tradeGoodSalt {
+    return Intl.message(
+      'Salt',
+      name: 'tradeGoodSalt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ceramics`
+  String get tradeGoodCeramics {
+    return Intl.message(
+      'Ceramics',
+      name: 'tradeGoodCeramics',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wool`
+  String get tradeGoodWool {
+    return Intl.message(
+      'Wool',
+      name: 'tradeGoodWool',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cotton`
+  String get tradeGoodCotton {
+    return Intl.message(
+      'Cotton',
+      name: 'tradeGoodCotton',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Oil`
+  String get tradeGoodOil {
+    return Intl.message(
+      'Oil',
+      name: 'tradeGoodOil',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sugar`
+  String get tradeGoodSugar {
+    return Intl.message(
+      'Sugar',
+      name: 'tradeGoodSugar',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Grain`
+  String get tradeGoodGrain {
+    return Intl.message(
+      'Grain',
+      name: 'tradeGoodGrain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wine`
+  String get tradeGoodWine {
+    return Intl.message(
+      'Wine',
+      name: 'tradeGoodWine',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lacquer`
+  String get tradeGoodLacquer {
+    return Intl.message(
+      'Lacquer',
+      name: 'tradeGoodLacquer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Textiles`
+  String get tradeGoodTextiles {
+    return Intl.message(
+      'Textiles',
+      name: 'tradeGoodTextiles',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Livestock`
+  String get tradeGoodLivestock {
+    return Intl.message(
+      'Livestock',
+      name: 'tradeGoodLivestock',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Glass`
+  String get tradeGoodGlass {
+    return Intl.message(
+      'Glass',
+      name: 'tradeGoodGlass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tin`
+  String get tradeGoodTin {
+    return Intl.message(
+      'Tin',
+      name: 'tradeGoodTin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Silver`
+  String get tradeGoodSilver {
+    return Intl.message(
+      'Silver',
+      name: 'tradeGoodSilver',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copper`
+  String get tradeGoodCopper {
+    return Intl.message(
+      'Copper',
+      name: 'tradeGoodCopper',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bronze`
+  String get tradeGoodBronze {
+    return Intl.message(
+      'Bronze',
+      name: 'tradeGoodBronze',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lead`
+  String get tradeGoodLead {
+    return Intl.message(
+      'Lead',
+      name: 'tradeGoodLead',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Resin`
+  String get tradeGoodResin {
+    return Intl.message(
+      'Resin',
+      name: 'tradeGoodResin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Jade`
+  String get tradeGoodJade {
+    return Intl.message(
+      'Jade',
+      name: 'tradeGoodJade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Incense`
+  String get tradeGoodIncense {
+    return Intl.message(
+      'Incense',
+      name: 'tradeGoodIncense',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Spice`
+  String get tradeGoodSpice {
+    return Intl.message(
+      'Spice',
+      name: 'tradeGoodSpice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Herbs`
+  String get tradeGoodHerbs {
+    return Intl.message(
+      'Herbs',
+      name: 'tradeGoodHerbs',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Marble`
+  String get tradeGoodMarble {
+    return Intl.message(
+      'Marble',
+      name: 'tradeGoodMarble',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dye`
+  String get tradeGoodDye {
+    return Intl.message(
+      'Dye',
+      name: 'tradeGoodDye',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gemstones`
+  String get tradeGoodGemstones {
+    return Intl.message(
+      'Gemstones',
+      name: 'tradeGoodGemstones',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tea`
+  String get tradeGoodTea {
+    return Intl.message(
+      'Tea',
+      name: 'tradeGoodTea',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Obsidian`
+  String get tradeGoodObsidian {
+    return Intl.message(
+      'Obsidian',
+      name: 'tradeGoodObsidian',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ivory`
+  String get tradeGoodIvory {
+    return Intl.message(
+      'Ivory',
+      name: 'tradeGoodIvory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Silk`
+  String get tradeGoodSilk {
+    return Intl.message(
+      'Silk',
+      name: 'tradeGoodSilk',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gold`
+  String get tradeGoodGold {
+    return Intl.message(
+      'Gold',
+      name: 'tradeGoodGold',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pearls`
+  String get tradeGoodPearls {
+    return Intl.message(
+      'Pearls',
+      name: 'tradeGoodPearls',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Amber`
+  String get tradeGoodAmber {
+    return Intl.message(
+      'Amber',
+      name: 'tradeGoodAmber',
       desc: '',
       args: [],
     );

@@ -4,9 +4,61 @@ import 'package:mega_empires_assistant/game/game.dart';
 import 'package:mega_empires_assistant/game/trade_goods.dart';
 import 'package:mega_empires_assistant/generated/l10n.dart';
 
+enum TradeGoodKey {
+  treasuryToken,
+  water,
+  ochre,
+  flax,
+  clay,
+  hides,
+  bone,
+  papyri,
+  stone,
+  iron,
+  furs,
+  wax,
+  fish,
+  timber,
+  fruit,
+  salt,
+  ceramics,
+  wool,
+  cotton,
+  oil,
+  sugar,
+  grain,
+  wine,
+  lacquer,
+  textiles,
+  livestock,
+  glass,
+  tin,
+  silver,
+  copper,
+  bronze,
+  lead,
+  resin,
+  jade,
+  incense,
+  spice,
+  herbs,
+  marble,
+  dye,
+  gemstones,
+  tea,
+  obsidian,
+  ivory,
+  silk,
+  gold,
+  pearls,
+  amber
+}
+
 /// A trade good card
 final class TradeGood {
   final Game game;
+
+  final TradeGoodKey key;
 
   /// The title of the card
   final String title;
@@ -16,13 +68,17 @@ final class TradeGood {
 
   TradeGood(
       {this.game = Game.any,
+      required this.key,
       required this.title,
       required this.baseValue,
       required this.max,
       this.minPlayers = 0});
 
-  static TradeGood treasuryToken =
-      TradeGood(title: S.current.treasuryToken, baseValue: 1, max: 9999);
+  static TradeGood treasuryToken = TradeGood(
+      key: TradeGoodKey.treasuryToken,
+      title: S.current.treasuryToken,
+      baseValue: 1,
+      max: 9999);
 
   /// The value of the [TradeGood] in a particular count.
   int calculateValue(GameState state, int count) {

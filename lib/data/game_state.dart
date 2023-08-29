@@ -36,7 +36,12 @@ final class GameState {
     required this.tradeGoods,
     required this.advancesInCart,
     required this.settings}) {
-    totalCredits = Map.of(additionalCredits);
+    totalCredits = {
+      for (var e in AdvanceColour.values) e: 0
+    };
+    additionalCredits.forEach((key, value) {
+      totalCredits[key] = totalCredits[key]! + value;
+    });
 
     for (PurchasedAdvance purchasedAdvance in purchasedAdvances) {
       purchasedAdvance.credits().forEach((colour, count) {
@@ -217,7 +222,7 @@ final class GameState {
             .map((key, value) => MapEntry(key.enColourName, value)),
         'purchasedAdvances': purchasedAdvances.toList(),
         'tradeGoods':
-        tradeGoods.map((key, value) => MapEntry(key.title, value)),
+        tradeGoods.map((key, value) => MapEntry(key.key, value)),
         'settings': settings.toJson(),
         'advancesInCart': advancesInCart.toList()
       };

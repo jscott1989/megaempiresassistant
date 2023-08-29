@@ -3,11 +3,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mega_empires_assistant/generated/l10n.dart';
 import 'package:mega_empires_assistant/screens/main_menu.dart';
 
-void main() => runApp(const WesternEmpiresAssistant());
+void main() => runApp(const MegaEmpiresAssistant());
 
 /// App Entry Point
-final class WesternEmpiresAssistant extends StatelessWidget {
-  const WesternEmpiresAssistant({super.key});
+final class MegaEmpiresAssistant extends StatelessWidget {
+  const MegaEmpiresAssistant({super.key});
 
   @override
   Widget build(BuildContext context) {

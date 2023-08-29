@@ -56,6 +56,11 @@ final class Advance {
   /// The number of cards you hand limit increases by by holding this advance
   final int handLimitModifier;
 
+  @override
+  String toString() {
+    return "Advance{key=$key}";
+  }
+
   Advance(
       {required this.colour1,
       this.colour2,

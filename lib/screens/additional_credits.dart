@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mega_empires_assistant/data/advance_colour.dart';
 import 'package:mega_empires_assistant/data/game_state.dart';
 import 'package:mega_empires_assistant/generated/l10n.dart';
+import 'package:mega_empires_assistant/screens/keys.dart';
 import 'package:mega_empires_assistant/screens/widgets/credit_list_tile.dart';
 
 /// Screen used when a purchased advance requires selecting some number of
@@ -128,6 +129,7 @@ final class ChooseAdditionalCreditsScreenState
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       TextButton(
+                        key: startButton,
                         onPressed: remainingCredits() == 0
                             ? () {
                                 Navigator.pop(context);

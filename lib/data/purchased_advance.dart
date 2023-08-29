@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:mega_empires_assistant/data/advance_colour.dart';
 import 'package:mega_empires_assistant/game/advances.dart';
 
@@ -10,6 +11,20 @@ final class PurchasedAdvance {
   final Advance advance;
   final Map<AdvanceColour, int> additionalCredits;
 
+  @override
+  bool operator ==(o) =>
+      o is PurchasedAdvance &&
+      advance.key == o.advance.key &&
+      mapEquals(additionalCredits, o.additionalCredits);
+
+  @override
+  int get hashCode => advance.key.hashCode;
+
+  @override
+  String toString() {
+    return "PurchasedAdvance{advance=$advance, additionalCredits=$additionalCredits}";
+  }
+
   /// Create a PurchasedAdvance for a particular advance
   PurchasedAdvance.of(this.advance) : additionalCredits = {};
 
@@ -20,7 +35,11 @@ final class PurchasedAdvance {
   /// The complete set of credits from this purchased advance, including
   /// mandatory and "additional".
   Map<AdvanceColour, int> credits() {
-    final credits = Map.of(additionalCredits);
+    final credits = {for (var e in AdvanceColour.values) e: 0};
+
+    additionalCredits.forEach((key, value) {
+      credits[key] = credits[key]! + value;
+    });
 
     advance.discounts.forEach((colour, value) {
       if (!credits.containsKey(colour)) {

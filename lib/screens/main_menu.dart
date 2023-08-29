@@ -38,36 +38,36 @@ final class MainMenuScreenState extends State<MainMenuScreen> {
               EdgeInsets.symmetric(horizontal: const Size.fromWidth(100).width),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(S.of(context).instructions),
-                Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          minimumSize: const Size.fromHeight(40),
-                        ),
-                        onPressed: canContinue
-                            ? () {
-                                SharedPreferences.getInstance()
-                                    .then((value) => setState(() {
-                                          var gameState = GameState.fromJson(
-                                              jsonDecode(value
-                                                  .getString("gameState")!));
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                    child: SingleChildScrollView(
+                        child: Text(S.of(context).instructions))),
+                Flexible(
+                    child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: OutlinedButton(
+                            onPressed: canContinue
+                                ? () {
+                                    SharedPreferences.getInstance()
+                                        .then((value) => setState(() {
+                                              var gameState =
+                                                  GameState.fromJson(jsonDecode(
+                                                      value.getString(
+                                                          "gameState")!));
 
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      SelectTradeGoodsScreen(
-                                                          state: gameState)));
-                                        }));
-                              }
-                            : null,
-                        child: Text(S.of(context).cont))),
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          SelectTradeGoodsScreen(
+                                                              state:
+                                                                  gameState)));
+                                            }));
+                                  }
+                                : null,
+                            child: Text(S.of(context).cont)))),
                 OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(40),
-                    ),
                     onPressed: () {
                       Navigator.push(
                           context,

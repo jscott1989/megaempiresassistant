@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mega_empires_assistant/data/game_state.dart';
 import 'package:mega_empires_assistant/data/trade_goods.dart';
 import 'package:mega_empires_assistant/generated/l10n.dart';
+import 'package:mega_empires_assistant/screens/keys.dart';
 import 'package:mega_empires_assistant/screens/trade_goods.dart';
 
 import '../data/advance_colour.dart';
@@ -134,6 +135,7 @@ final class SummaryScreenState extends State<SummaryScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       OutlinedButton(
+                        key: startButton,
                         child: Text(S.of(context).cont),
                         onPressed: () {
                           nextScreen();

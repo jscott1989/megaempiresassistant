@@ -7,6 +7,7 @@ import 'package:mega_empires_assistant/data/settings.dart';
 import 'package:mega_empires_assistant/game/game.dart';
 import 'package:mega_empires_assistant/game/game_setup.dart';
 import 'package:mega_empires_assistant/generated/l10n.dart';
+import 'package:mega_empires_assistant/screens/keys.dart';
 import 'package:mega_empires_assistant/screens/short_game.dart';
 import 'package:mega_empires_assistant/screens/summary.dart';
 import 'package:mega_empires_assistant/screens/trade_goods.dart';
@@ -91,6 +92,7 @@ final class NewGameScreenState extends State<NewGameScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             OutlinedButton(
+                                key: startButton,
                                 onPressed: (gameSettingsAreValid(
                                         enabledGames: enabledGames,
                                         numberOfPlayers: numberOfPlayers)

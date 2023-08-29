@@ -4,6 +4,7 @@ import 'package:mega_empires_assistant/data/trade_goods.dart';
 import 'package:mega_empires_assistant/game/game.dart';
 import 'package:mega_empires_assistant/game/trade_goods.dart';
 import 'package:mega_empires_assistant/generated/l10n.dart';
+import 'package:mega_empires_assistant/screens/keys.dart';
 import 'package:mega_empires_assistant/screens/widgets/popup_menu.dart';
 import 'package:mega_empires_assistant/screens/widgets/search_controller.dart';
 
@@ -115,6 +116,7 @@ final class SelectTradeGoodsScreenState extends State<SelectTradeGoodsScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       OutlinedButton(
+                        key: startButton,
                         child: Text(S.of(context).cont),
                         onPressed: () {
                           Navigator.push(
