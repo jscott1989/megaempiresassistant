@@ -4,21 +4,22 @@ import 'package:mega_empires_assistant/data/game_state.dart';
 import 'package:mega_empires_assistant/generated/l10n.dart';
 
 /// Screen showing information about a particular [Calamity]
-final class ViewCalamity extends StatefulWidget {
+final class ViewCalamityScreen extends StatefulWidget {
   /// Overall [GameState]
   final GameState state;
 
   /// The [Calamity] being viewed
   final Calamity calamity;
 
-  const ViewCalamity({Key? key, required this.state, required this.calamity})
+  const ViewCalamityScreen(
+      {Key? key, required this.state, required this.calamity})
       : super(key: key);
 
   @override
-  ViewCalamityState createState() => ViewCalamityState();
+  ViewCalamityScreenState createState() => ViewCalamityScreenState();
 }
 
-final class ViewCalamityState extends State<ViewCalamity> {
+final class ViewCalamityScreenState extends State<ViewCalamityScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

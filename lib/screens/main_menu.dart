@@ -3,8 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mega_empires_assistant/data/game_state.dart';
 import 'package:mega_empires_assistant/generated/l10n.dart';
+import 'package:mega_empires_assistant/screens/keys.dart';
 import 'package:mega_empires_assistant/screens/new_game.dart';
-import 'package:mega_empires_assistant/screens/trade_goods.dart';
+import 'package:mega_empires_assistant/screens/summary.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// The Welcome Screen
@@ -47,6 +48,7 @@ final class MainMenuScreenState extends State<MainMenuScreen> {
                     child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 20),
                         child: OutlinedButton(
+                            key: continueButton,
                             onPressed: canContinue
                                 ? () {
                                     SharedPreferences.getInstance()
@@ -56,18 +58,26 @@ final class MainMenuScreenState extends State<MainMenuScreen> {
                                                       value.getString(
                                                           "gameState")!));
 
+                                              // We move the advances into the cart so they are picked up by the summary
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          SelectTradeGoodsScreen(
-                                                              state:
-                                                                  gameState)));
+                                                      builder: (context) => SummaryScreen(
+                                                          additionalCredits:
+                                                              gameState
+                                                                  .additionalCredits,
+                                                          state: gameState
+                                                              .withAdvancesInCart(
+                                                                  gameState
+                                                                      .purchasedAdvances)
+                                                              .withAdvances(
+                                                                  {}))));
                                             }));
                                   }
                                 : null,
                             child: Text(S.of(context).cont)))),
                 OutlinedButton(
+                    key: startButton,
                     onPressed: () {
                       Navigator.push(
                           context,

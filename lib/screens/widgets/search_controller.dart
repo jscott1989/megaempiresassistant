@@ -8,11 +8,10 @@ final class SearchController<ResultType> extends StatefulWidget {
   final bool Function(dynamic, String) queryFunction;
   final Iterable<ResultType> allItems;
 
-  const SearchController(
-      {super.key,
-      required this.allItems,
-      required this.itemBuilder,
-      required this.queryFunction});
+  const SearchController({super.key,
+    required this.allItems,
+    required this.itemBuilder,
+    required this.queryFunction});
 
   @override
   SearchControllerState createState() => SearchControllerState();
@@ -38,33 +37,36 @@ final class SearchControllerState<ResultType>
 
   @override
   Widget build(BuildContext context) {
-    var results = query.isEmpty ? widget.allItems.toList() : searchResults;
+    if (query.isEmpty && searchResults.isEmpty) {
+      filterSearchResults("");
+    }
+
     return Expanded(
         child: Column(children: [
-      Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            onChanged: (query) {
-              filterSearchResults(query);
-            },
-            controller: searchController,
-            decoration: const InputDecoration(
-                labelText: "Search",
-                hintText: "Search",
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(25.0)))),
-          )),
-      Expanded(
-          child: ListView.builder(
-        itemCount: max(1, results.length),
-        itemBuilder: (context, index) {
-          if (results.isEmpty) {
-            return const Text("No results");
-          }
-          return widget.itemBuilder(results[index]);
-        },
-      ))
-    ]));
+          Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                onChanged: (query) {
+                  filterSearchResults(query);
+                },
+                controller: searchController,
+                decoration: const InputDecoration(
+                    labelText: "Search",
+                    hintText: "Search",
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25.0)))),
+              )),
+          Expanded(
+              child: ListView.builder(
+                itemCount: max(1, searchResults.length),
+                itemBuilder: (context, index) {
+                  if (searchResults.isEmpty) {
+                    return const Text("No results");
+                  }
+                  return widget.itemBuilder(searchResults[index]);
+                },
+              ))
+        ]));
   }
 }

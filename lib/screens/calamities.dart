@@ -91,8 +91,8 @@ final class CalamityListTile extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              ViewCalamity(state: state, calamity: calamity)));
+                          builder: (context) => ViewCalamityScreen(
+                              state: state, calamity: calamity)));
                 },
               ),
               Text("${calamity.value.toString()} ${calamity.title(state)}")

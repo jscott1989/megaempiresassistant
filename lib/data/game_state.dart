@@ -31,14 +31,13 @@ final class GameState {
   /// All credits including purchased advances and other reasons
   late final Map<AdvanceColour, int> totalCredits;
 
-  GameState({required this.additionalCredits,
-    required this.purchasedAdvances,
-    required this.tradeGoods,
-    required this.advancesInCart,
-    required this.settings}) {
-    totalCredits = {
-      for (var e in AdvanceColour.values) e: 0
-    };
+  GameState(
+      {required this.additionalCredits,
+      required this.purchasedAdvances,
+      required this.tradeGoods,
+      required this.advancesInCart,
+      required this.settings}) {
+    totalCredits = {for (var e in AdvanceColour.values) e: 0};
     additionalCredits.forEach((key, value) {
       totalCredits[key] = totalCredits[key]! + value;
     });
@@ -117,21 +116,20 @@ final class GameState {
 
   /// True if the advance is purchased
   bool advanceIsPurchased(AdvanceKey advance) {
-    return purchasedAdvances.any((purchasedAdvance) =>
-    purchasedAdvance.advance.key == advance);
+    return purchasedAdvances
+        .any((purchasedAdvance) => purchasedAdvance.advance.key == advance);
   }
 
   /// True if the advance is currently in the cart.
   bool advanceIsInCart(AdvanceKey advance) {
-    return advancesInCart.any((advanceInCart) =>
-    advanceInCart.advance.key == advance);
+    return advancesInCart
+        .any((advanceInCart) => advanceInCart.advance.key == advance);
   }
 
   Advance? mostExpensiveAdvanceInCartExceptLibrary() {
     if (advancesInCart.isEmpty ||
         (advancesInCart.length == 1 &&
-            advancesInCart
-                .any((e) => e.advance.key == AdvanceKey.library))) {
+            advancesInCart.any((e) => e.advance.key == AdvanceKey.library))) {
       return null;
     }
 
@@ -158,12 +156,12 @@ final class GameState {
 
     PurchasedAdvance advance = advancesInCart.reduce((a1, a2) {
       if ((a1.advance.colour1 != AdvanceColour.green &&
-          a1.advance.colour2 != AdvanceColour.green) ||
+              a1.advance.colour2 != AdvanceColour.green) ||
           (a1.advance.price >= 100)) {
         return a2;
       }
       if ((a2.advance.colour1 != AdvanceColour.green &&
-          a2.advance.colour2 != AdvanceColour.green) ||
+              a2.advance.colour2 != AdvanceColour.green) ||
           (a2.advance.price >= 100)) {
         return a1;
       }
@@ -175,7 +173,7 @@ final class GameState {
     });
 
     if ((advance.advance.colour1 != AdvanceColour.green &&
-        advance.advance.colour2 != AdvanceColour.green) ||
+            advance.advance.colour2 != AdvanceColour.green) ||
         (advance.advance.price >= 100)) {
       return null;
     }
@@ -186,43 +184,41 @@ final class GameState {
   /// The number of cards to be discarded with the current state
   int get cardsToDiscard {
     final handLimit = (((settings.numberOfPlayers > 11) ? 9 : 8) +
-        purchasedAdvances
-            .map((e) => e.advance.handLimitModifier)
-            .fold(0, (p, e) => p + e) +
-        advancesInCart
-            .map((e) => e.advance.handLimitModifier)
-            .fold(0, (p, e) => p + e))
+            purchasedAdvances
+                .map((e) => e.advance.handLimitModifier)
+                .fold(0, (p, e) => p + e) +
+            advancesInCart
+                .map((e) => e.advance.handLimitModifier)
+                .fold(0, (p, e) => p + e))
         .toInt();
 
-    return max(0, tradeGoods.entries
-        .where((element) => element.key != TradeGood.treasuryToken)
-        .fold(0, (a, b) => a + b.value) - handLimit);
+    return max(
+        0,
+        tradeGoods.entries
+                .where((element) => element.key != TradeGood.treasuryToken)
+                .fold(0, (a, b) => a + b.value) -
+            handLimit);
   }
 
-  factory GameState.fromJson(Map<String, dynamic> data) =>
-      GameState(
-          additionalCredits: data["additionalCredits"].map<AdvanceColour, int>(
-                  (String key, dynamic value) =>
+  factory GameState.fromJson(Map<String, dynamic> data) => GameState(
+      additionalCredits: data["additionalCredits"].map<AdvanceColour, int>(
+              (String key, dynamic value) =>
                   MapEntry(advanceColourFromEnColourName(key), value as int))
           as Map<AdvanceColour, int>,
-          purchasedAdvances: Set.of(data["purchasedAdvances"]
-              .map<PurchasedAdvance>((dynamic s) =>
-              PurchasedAdvance.fromJson(s))
-              .toList() as List<PurchasedAdvance>),
-          tradeGoods: data["tradeGoods"].map<TradeGood, int>((String key,
-              dynamic value) => MapEntry(indexedTradeGoods[key]!, value as int))
+      purchasedAdvances: Set.of(data["purchasedAdvances"]
+          .map<PurchasedAdvance>((dynamic s) => PurchasedAdvance.fromJson(s))
+          .toList() as List<PurchasedAdvance>),
+      tradeGoods: data["tradeGoods"].map<TradeGood, int>((String key, dynamic value) => MapEntry(indexedTradeGoods[TradeGoodKey.values.byName(key)]!, value as int))
           as Map<TradeGood, int>,
-          settings: Settings.fromJson(data["settings"]),
-          advancesInCart: {
-          }); // We don't restore advancesInCart because we'll reload on the first screen
+      settings: Settings.fromJson(data["settings"]),
+      advancesInCart: {}); // We don't restore advancesInCart because we'll reload on the first screen
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'additionalCredits': additionalCredits
             .map((key, value) => MapEntry(key.enColourName, value)),
         'purchasedAdvances': purchasedAdvances.toList(),
         'tradeGoods':
-        tradeGoods.map((key, value) => MapEntry(key.key, value)),
+            tradeGoods.map((key, value) => MapEntry(key.key.name, value)),
         'settings': settings.toJson(),
         'advancesInCart': advancesInCart.toList()
       };

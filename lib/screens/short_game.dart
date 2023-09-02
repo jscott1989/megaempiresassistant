@@ -127,21 +127,19 @@ final class ShortGameScreenState extends State<ShortGameScreen> {
                       Column(
                           children: scenariosForState(widget.state)
                               .expand((e) => {
-                                    ListTile(
+                                    RadioListTile<Scenario>(
                                       title: Text(e.name),
-                                      leading: Radio<Scenario>(
-                                        key: Key("scenario_${e.key.name}"),
-                                        value: e,
-                                        groupValue: selectedScenario,
-                                        onChanged: (Scenario? value) {
-                                          setState(() {
-                                            selectedScenarioInProgress = value;
-                                            selectedAdvancesInProgress = {};
-                                            selectAdvances();
-                                          });
-                                        },
-                                      ),
-                                    )
+                                      key: Key("scenario_${e.key.name}"),
+                                      value: e,
+                                      groupValue: selectedScenario,
+                                      onChanged: (Scenario? value) {
+                                        setState(() {
+                                          selectedScenarioInProgress = value;
+                                          selectedAdvancesInProgress = {};
+                                          selectAdvances();
+                                        });
+                                      },
+                                    ),
                                   })
                               .toList())
                     ],
