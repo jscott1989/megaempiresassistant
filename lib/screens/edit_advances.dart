@@ -130,7 +130,7 @@ final class AdvanceListTile extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            ViewAdvance(state: state, advance: advance)));
+                            ViewAdvanceScreen(state: state, advance: advance)));
               },
             ),
             Text(" ${advance.title}")

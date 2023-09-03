@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mega_empires_assistant/data/advance_colour.dart';
 import 'package:mega_empires_assistant/data/game_state.dart';
 import 'package:mega_empires_assistant/generated/l10n.dart';
-import 'package:mega_empires_assistant/screens/keys.dart';
 import 'package:mega_empires_assistant/screens/widgets/credit_list_tile.dart';
+import 'package:mega_empires_assistant/screens/widgets/keys.dart';
 
 /// Screen used when a purchased advance requires selecting some number of
 /// "additional" credits on top of the ones it gives by default.

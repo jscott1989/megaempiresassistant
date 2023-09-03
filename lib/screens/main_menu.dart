@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mega_empires_assistant/data/game_state.dart';
 import 'package:mega_empires_assistant/generated/l10n.dart';
-import 'package:mega_empires_assistant/screens/keys.dart';
 import 'package:mega_empires_assistant/screens/new_game.dart';
 import 'package:mega_empires_assistant/screens/summary.dart';
+import 'package:mega_empires_assistant/screens/widgets/keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// The Welcome Screen

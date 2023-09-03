@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mega_empires_assistant/data/game_state.dart';
 import 'package:mega_empires_assistant/data/trade_goods.dart';
 import 'package:mega_empires_assistant/generated/l10n.dart';
-import 'package:mega_empires_assistant/screens/keys.dart';
 import 'package:mega_empires_assistant/screens/trade_goods.dart';
+import 'package:mega_empires_assistant/screens/widgets/keys.dart';
 
 import '../data/advance_colour.dart';
 
@@ -83,9 +83,10 @@ final class SummaryScreenState extends State<SummaryScreen> {
               child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: (hasThingsToDiscard() || hasThingsToPickup())
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
+                      ? SingleChildScrollView(
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
                               hasThingsToPickup()
                                   ? Text(S.of(context).pickUp,
                                       style: const TextStyle(
@@ -124,7 +125,7 @@ final class SummaryScreenState extends State<SummaryScreen> {
                                       .map((e) =>
                                           Text("${e.value} ${e.key.title}"))
                                       .toList())
-                            ])
+                            ]))
                       : Text(S.of(context).summaryNothingToDo))),
           Padding(
               padding: const EdgeInsets.all(8.0),

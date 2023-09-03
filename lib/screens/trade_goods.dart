@@ -4,7 +4,7 @@ import 'package:mega_empires_assistant/data/trade_goods.dart';
 import 'package:mega_empires_assistant/game/game.dart';
 import 'package:mega_empires_assistant/game/trade_goods.dart';
 import 'package:mega_empires_assistant/generated/l10n.dart';
-import 'package:mega_empires_assistant/screens/keys.dart';
+import 'package:mega_empires_assistant/screens/widgets/keys.dart';
 import 'package:mega_empires_assistant/screens/widgets/popup_menu.dart';
 import 'package:mega_empires_assistant/screens/widgets/search_controller.dart';
 
@@ -49,7 +49,8 @@ final class SelectTradeGoodsScreenState extends State<SelectTradeGoodsScreen> {
                   .contains(query.toLowerCase())) {
                 return false;
               }
-              if (!widget.state.settings.games.contains(tradeGood.game)) {
+              if (tradeGood.game != Game.any &&
+                  !widget.state.settings.games.contains(tradeGood.game)) {
                 return false;
               }
               if (widget.state.settings.numberOfPlayers > 9 &&

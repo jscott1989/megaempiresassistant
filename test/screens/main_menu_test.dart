@@ -7,10 +7,10 @@ import 'package:mega_empires_assistant/game/advances.dart';
 import 'package:mega_empires_assistant/game/game.dart';
 import 'package:mega_empires_assistant/game/game_setup.dart';
 import 'package:mega_empires_assistant/game/trade_goods.dart';
-import 'package:mega_empires_assistant/screens/keys.dart';
 import 'package:mega_empires_assistant/screens/main_menu.dart';
 import 'package:mega_empires_assistant/screens/new_game.dart';
 import 'package:mega_empires_assistant/screens/summary.dart';
+import 'package:mega_empires_assistant/screens/widgets/keys.dart';
 
 import '../utils/test_utils.dart';
 

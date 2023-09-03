@@ -4,21 +4,22 @@ import 'package:mega_empires_assistant/data/game_state.dart';
 import 'package:mega_empires_assistant/generated/l10n.dart';
 
 /// Screen showing information about a particular [Advance]
-final class ViewAdvance extends StatefulWidget {
+final class ViewAdvanceScreen extends StatefulWidget {
   /// Overall [GameState]
   final GameState state;
 
   /// The [Advance] being viewed
   final Advance advance;
 
-  const ViewAdvance({Key? key, required this.state, required this.advance})
+  const ViewAdvanceScreen(
+      {Key? key, required this.state, required this.advance})
       : super(key: key);
 
   @override
-  ViewAdvanceState createState() => ViewAdvanceState();
+  ViewAdvanceScreenState createState() => ViewAdvanceScreenState();
 }
 
-final class ViewAdvanceState extends State<ViewAdvance> {
+final class ViewAdvanceScreenState extends State<ViewAdvanceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

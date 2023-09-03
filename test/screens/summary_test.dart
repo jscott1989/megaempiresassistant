@@ -7,9 +7,9 @@ import 'package:mega_empires_assistant/game/advances.dart';
 import 'package:mega_empires_assistant/game/game.dart';
 import 'package:mega_empires_assistant/game/game_setup.dart';
 import 'package:mega_empires_assistant/game/trade_goods.dart';
-import 'package:mega_empires_assistant/screens/keys.dart';
 import 'package:mega_empires_assistant/screens/summary.dart';
 import 'package:mega_empires_assistant/screens/trade_goods.dart';
+import 'package:mega_empires_assistant/screens/widgets/keys.dart';
 
 import '../utils/test_utils.dart';
 
@@ -81,10 +81,10 @@ void main() {
             purchasedAdvances: {},
             tradeGoods: {},
             advancesInCart: {
-              indexedAdvances[AdvanceKey.anatomy]!.purchase(),
-              indexedAdvances[AdvanceKey.agriculture]!.purchase(),
-              indexedAdvances[AdvanceKey.mythology]!.purchase(),
-            },
+          indexedAdvances[AdvanceKey.anatomy]!.purchase(),
+          indexedAdvances[AdvanceKey.agriculture]!.purchase(),
+          indexedAdvances[AdvanceKey.mythology]!.purchase(),
+        },
             settings: Settings(
                 numberOfPlayers: 6,
                 games: {Game.western},
@@ -180,35 +180,35 @@ void main() {
   });
 
   testWidgets('continue - advances in cart are marked as purchased',
-          (tester) async {
-        final expectedPurchasedAdvances = {
-          indexedAdvances[AdvanceKey.anatomy]!.purchase(),
+      (tester) async {
+    final expectedPurchasedAdvances = {
+      indexedAdvances[AdvanceKey.anatomy]!.purchase(),
+      indexedAdvances[AdvanceKey.agriculture]!.purchase(),
+      indexedAdvances[AdvanceKey.mythology]!.purchase(),
+    };
+    await tester.pumpWidget(prepareWidget(SummaryScreen(
+        state: GameState(
+            additionalCredits: {},
+            purchasedAdvances: {
           indexedAdvances[AdvanceKey.agriculture]!.purchase(),
-          indexedAdvances[AdvanceKey.mythology]!.purchase(),
-        };
-        await tester.pumpWidget(prepareWidget(SummaryScreen(
-            state: GameState(
-                additionalCredits: {},
-                purchasedAdvances: {
-                  indexedAdvances[AdvanceKey.agriculture]!.purchase(),
-                  indexedAdvances[AdvanceKey.mythology]!.purchase()
-                },
-                tradeGoods: {},
-                advancesInCart: {
-                  indexedAdvances[AdvanceKey.anatomy]!.purchase()
-                },
-                settings: Settings(
-                    numberOfPlayers: 6,
-                    games: {Game.western},
-                    setup: GameSetup.normal)))));
-        await tester.pumpAndSettle();
+          indexedAdvances[AdvanceKey.mythology]!.purchase()
+        },
+            tradeGoods: {},
+            advancesInCart: {
+          indexedAdvances[AdvanceKey.anatomy]!.purchase()
+        },
+            settings: Settings(
+                numberOfPlayers: 6,
+                games: {Game.western},
+                setup: GameSetup.normal)))));
+    await tester.pumpAndSettle();
 
-        await tester.tap(find.byKey(startButton));
-        await tester.pumpAndSettle();
+    await tester.tap(find.byKey(startButton));
+    await tester.pumpAndSettle();
 
-        final state = findGameState(tester, find);
-        expect(state.purchasedAdvances, expectedPurchasedAdvances);
-      });
+    final state = findGameState(tester, find);
+    expect(state.purchasedAdvances, expectedPurchasedAdvances);
+  });
 
   testWidgets('continue - moves to trade goods screen', (tester) async {
     await tester.pumpWidget(prepareWidget(SummaryScreen(
@@ -230,5 +230,33 @@ void main() {
     expect(find.byType(SelectTradeGoodsScreen), findsOneWidget);
   });
 
-  // TODO: Test the summary when we put lots and lots of things in it (we need to make it scrollable so it doesn't crash)
+  testWidgets('scrolls correctly when too many to show on screen',
+      (tester) async {
+    await tester.pumpWidget(prepareWidget(SummaryScreen(
+        additionalCredits: const {
+          AdvanceColour.red: 10,
+          AdvanceColour.yellow: 10,
+          AdvanceColour.green: 10,
+          AdvanceColour.orange: 10,
+          AdvanceColour.blue: 10
+        },
+        state: GameState(
+            additionalCredits: const {
+              AdvanceColour.red: 10,
+              AdvanceColour.yellow: 10,
+              AdvanceColour.green: 10,
+              AdvanceColour.orange: 10,
+              AdvanceColour.blue: 10
+            },
+            purchasedAdvances: {},
+            tradeGoods: {},
+            advancesInCart: allAdvances.map((e) => e.purchase()).toSet(),
+            settings: Settings(
+                numberOfPlayers: 6,
+                games: {Game.western},
+                setup: GameSetup.normal)))));
+
+    await expectLater(find.byType(SummaryScreen),
+        matchesGoldenFile('golden/summary_screen_maximum_size.png'));
+  });
 }

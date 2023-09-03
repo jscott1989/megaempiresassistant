@@ -131,25 +131,29 @@ final class MakePaymentScreenState extends State<MakePaymentScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Padding(
-                      padding: const EdgeInsets.only(right: 40),
-                      child: Row(children: [
-                        Text(
-                          "$stillToPayText: ${stillToPay.abs()}",
-                          style: TextStyle(
-                              color:
-                                  (stillToPay > 0) ? Colors.red : Colors.black),
-                        ),
-                        const Text("     "),
-                        (stillToPay > 0 || cardsToDiscard <= 0)
-                            ? const Text("")
-                            : Text(
-                                S
-                                    .of(context)
-                                    .paymentDiscardTradeGoods(cardsToDiscard),
-                                style: const TextStyle(color: Colors.red),
-                              )
-                      ])),
+                  Expanded(
+                      child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Padding(
+                              padding: const EdgeInsets.only(right: 40),
+                              child: Row(children: [
+                                Text(
+                                  "$stillToPayText: ${stillToPay.abs()}",
+                                  style: TextStyle(
+                                      color: (stillToPay > 0)
+                                          ? Colors.red
+                                          : Colors.black),
+                                ),
+                                const Text("     "),
+                                (stillToPay > 0 || cardsToDiscard <= 0)
+                                    ? const Text("")
+                                    : Text(
+                                        S.of(context).paymentDiscardTradeGoods(
+                                            cardsToDiscard),
+                                        style:
+                                            const TextStyle(color: Colors.red),
+                                      )
+                              ])))),
                   ButtonBar(
                     mainAxisSize: MainAxisSize.min,
                     children: [

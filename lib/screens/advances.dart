@@ -9,6 +9,7 @@ import 'package:mega_empires_assistant/screens/additional_credits.dart';
 import 'package:mega_empires_assistant/screens/payment.dart';
 import 'package:mega_empires_assistant/screens/summary.dart';
 import 'package:mega_empires_assistant/screens/view_advance.dart';
+import 'package:mega_empires_assistant/screens/widgets/keys.dart';
 import 'package:mega_empires_assistant/screens/widgets/popup_menu.dart';
 import 'package:mega_empires_assistant/screens/widgets/search_controller.dart';
 
@@ -142,6 +143,7 @@ final class PurchaseAdvancesScreenState extends State<PurchaseAdvancesScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       OutlinedButton(
+                        key: startButton,
                         child: Text(S.current.cont),
                         onPressed: () {
                           // We only need to go to the payment screen if either we are purchasing something or we need to discard
@@ -227,6 +229,7 @@ final class PurchaseAdvanceListTile extends StatelessWidget {
                       (advanceState == AdvanceState.purchased)
                           ? const Text("")
                           : TextButton(
+                              key: addRemoveAdvanceButtonKey(advance.key),
                               onPressed:
                                   (advanceState != AdvanceState.unaffordable)
                                       ? onPress
@@ -247,6 +250,7 @@ final class PurchaseAdvanceListTile extends StatelessWidget {
 Widget advanceTitle(GameState state, BuildContext context, Advance advance) {
   return Row(children: [
     TextButton(
+      key: advanceInfoButton(advance.key),
       style: TextButton.styleFrom(
           padding: EdgeInsets.zero, minimumSize: const Size(0, 30)),
       child: const Icon(Icons.info_outline, color: Colors.black),
@@ -255,7 +259,7 @@ Widget advanceTitle(GameState state, BuildContext context, Advance advance) {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    ViewAdvance(state: state, advance: advance)));
+                    ViewAdvanceScreen(state: state, advance: advance)));
       },
     ),
     Text(" ${advance.title}")
@@ -264,3 +268,11 @@ Widget advanceTitle(GameState state, BuildContext context, Advance advance) {
 
 /// The state of an Advance specifically for the [PurchaseAdvancesScreen]
 enum AdvanceState { affordable, unaffordable, inCart, purchased }
+
+Key addRemoveAdvanceButtonKey(AdvanceKey advanceKey) {
+  return Key("addRemoveAdvance_${advanceKey.name}");
+}
+
+Key advanceInfoButton(AdvanceKey advanceKey) {
+  return Key("advanceInfo_${advanceKey.name}");
+}

@@ -6,8 +6,8 @@ import 'package:mega_empires_assistant/data/short_game.dart';
 import 'package:mega_empires_assistant/game/advances.dart';
 import 'package:mega_empires_assistant/generated/l10n.dart';
 import 'package:mega_empires_assistant/screens/additional_credits.dart';
-import 'package:mega_empires_assistant/screens/keys.dart';
 import 'package:mega_empires_assistant/screens/summary.dart';
+import 'package:mega_empires_assistant/screens/widgets/keys.dart';
 
 /// Screen for selecting short game scenarios
 final class ShortGameScreen extends StatefulWidget {

@@ -12,6 +12,7 @@ Widget createPopupMenu(
     required GameState state,
     required Widget Function(GameState) onReturn}) {
   return PopupMenuButton(
+    key: quickMenu,
     icon: const Icon(Icons.settings),
     onSelected: (option) {
       if (option == "advancements") {
@@ -66,14 +67,28 @@ Widget createPopupMenu(
     itemBuilder: (BuildContext context) {
       return <PopupMenuEntry>[
         PopupMenuItem<String>(
-            value: "advancements", child: Text(S.of(context).editAdvances)),
+            key: editAdvances,
+            value: "advancements",
+            child: Text(S.of(context).editAdvances)),
         PopupMenuItem<String>(
-            value: "credits", child: Text(S.of(context).editCredits)),
+            key: editCredits,
+            value: "credits",
+            child: Text(S.of(context).editCredits)),
         PopupMenuItem<String>(
-            value: "calamities", child: Text(S.of(context).viewCalamities)),
+            key: viewCalamities,
+            value: "calamities",
+            child: Text(S.of(context).viewCalamities)),
         PopupMenuItem<String>(
-            value: "settings", child: Text(S.of(context).settings))
+            key: settings,
+            value: "settings",
+            child: Text(S.of(context).settings))
       ];
     },
   );
 }
+
+const quickMenu = Key("quickMenu");
+const editAdvances = Key("editAdvances");
+const editCredits = Key("editCredits");
+const viewCalamities = Key("viewCalamities");
+const settings = Key("settings");

@@ -5,7 +5,7 @@ void main() {
 
   // Advances that are purchased are listed
 
-  // Advances with optional credits work correctly (CURRENTLY THEY DO NOT!)
+  // Advances with optional credits work correctly
 
   // Search works
 
